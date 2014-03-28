@@ -1,6 +1,12 @@
 winxp
 =====
-Git-1.8.5.2-preview20131230.exe already installed
+Git-1.8.4-preview20130916.exe already installed
+--------------------------------------------------------------------------------
+WARNING: git 1.8.5.2 BROKEN
+git push -u origin master FAILS WITH fatal: could not read Username for 'https://github.com': No such file or directory
+SEE https://teamtreehouse.com/forum/pushing-to-a-remote-github-repository-git-error-for-windows-users-found-during-ruby-track-build-a-social-networ
+--------------------------------------------------------------------------------
+
 download and install python-3.4.0.msi
 
 vezerlopult/rendszer/specialis/kornyezeti valtozok
@@ -69,7 +75,7 @@ run it again - succeeds
   ...lots of messages
   ...but no assertion error
 
-commit changes to git
+commit changes to local git repo
 
   (FROM NOW ON THE DEFAULT DIR IS /d/documents and settings/hunkis/agco/dev/_misc/python/test_driven_dev_with_python/superlists)
 { $ mv ../test_driven_dev_with_python.txt . }
@@ -89,7 +95,72 @@ commit changes to git
   ...opens vi
   ...into the first line insert
   first commit - first ft and basic django setup
+  
+create github repo
+
+  sign up on github as janos-kiss
+  https://github.com
+    sign in
+    janos-kiss/create repo
+      owner: janos-kiss
+      repo name: test_driven_dev_with_python__superlists
+      (x) public
+      create repo
+
+push local repo to github
+
+  $ git remote add origin https://github.com/janos-kiss/test_driven_dev_with_python__superlists.git
+  $ git push -u origin master
+  Username for 'https://github.com': janos-kiss
+  Password for 'https://janos-kiss@github.com':
+  Counting objects: 11, done.
+  ...
 
 ================================================================================
 2 - extending our functional test using the unittest module
 ================================================================================
+create test case with unittest and run it
+ 
+  $ vi 02_01_functional_tests.py
+  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+  from selenium import webdriver
+  import unittest
+
+  class NewVisitorTest(unittest.TestCase):
+  
+    def setUp(self):
+      self.browser = webdriver.Chrome()
+      self.browser.implicitly_wait(3)
+      
+    def tearDown(self):
+      self.browser.quit()
+      
+    def test_can_start_a_list_and_retrieve_it_later(self):
+      # Edith has heard about a cool new online to-do app. She goes
+      # to check out its homepage
+      self.browser.get('http://localhost:8000')
+
+      # She notices the page title and header mention to-do lists
+      self.assertIn('To-Do', self.browser.title) #
+      self.fail('Finish the test!') #
+
+      # She is invited to enter a to-do item straight away
+      # ...rest of comments
+      
+  if __name__ == '__main__':
+  unittest.main(warnings='ignore')
+  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+  (shell 1)$ python3 manage.py runserver
+  (shell 1)$ python3 02_01_functional_tests.py
+
+commit to local repo and push to github
+
+  $ git add 02_01_functional_tests.py
+  $ git diff
+  ...
+  $ git status
+  ...
+  $ git commit -a
+
+  $ git push -u origin master
